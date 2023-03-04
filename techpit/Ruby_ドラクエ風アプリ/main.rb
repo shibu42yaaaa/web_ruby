@@ -15,24 +15,42 @@ class Brave
 
   def attack(monster)
     puts "#{@name}の攻撃"
+    # 攻撃タイプ
+    attack_type = decision_attack_type
+    # 攻撃ダメージ換算
+    damage = calculate_damage(monster, attack_type)
+    # ダメージをHPに反映させる
+    cause_damage(monster, damage)
 
-    # 0~3の間でランダム数値
-    attack_num = rand(4)
-
-    # 4分の1の確率でspecial_attackを実行
-    if attack_num == 0
-      puts "必殺技"
-      damage = culculate_special_attack - monster.defense
-    else
-      puts "通常攻撃"
-      damage = @offense - monster.defense
-    end
-
-    monster.hp -= damage
     
-    # メッセージ追加
-    puts "#{monster.name}は#{damage}ポイントのダメージを受けた。"
+    
+    # メッセージ
     puts "#{monster.name}の残りHPは#{monster.hp}ポイントだ。"
+  end
+
+  def decision_attack_type
+    attack_num = rand(4)
+    if attack_num == 0
+      puts "必殺攻撃発動"
+      puts "滅びのバーストストリーム"
+      "special_attack"
+    else
+      puts "ゾンビアタック"
+      "normal_attack"
+    end
+  end
+
+  def calculate_damage(monster, attack_type)
+    if attack_type == "special_attack"
+      culculate_special_attack - monster.defense
+    else
+      @offense - monster.defense
+    end
+  end
+  # HPへのダメージ処理を反映
+  def cause_damage(monster, damage)
+    monster.hp -= damage
+    puts "#{monster.name}は#{damage}ポイントのダメージを受けた。"
   end
 
   def culculate_special_attack
