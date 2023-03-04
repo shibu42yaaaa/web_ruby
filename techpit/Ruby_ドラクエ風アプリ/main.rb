@@ -83,7 +83,8 @@ class Monster
     # 変身する際のトリガーを計算
     @trigger_of_transform = params[:hp] * CALC_HALF_HP
   end
-
+  
+  # 攻撃メソッド
   def attack(brave)
     # HPが半分以下、かつ、モンスター変身判定フラグがfalseのときに実行
     if @hp <= @trigger_of_transform &&  @transfrom_flag == false
@@ -93,15 +94,27 @@ class Monster
     end
     
     puts "#{@name}の攻撃"
+    damage = calculate_damage(brave)
+    #ダメージ反映処理
+    cause_damage(target: brave, damage: damage)
 
-    damage = (@offense - brave.defense).round
-    (brave.hp -= damage).round
-
-    puts "#{brave.name}は#{damage}のダメージを受けた"
+    
     puts "#{brave.name}の残りHPは#{brave.hp}だ"
   end
 
   private
+
+  def calculate_damage(target)
+    (@offense - target.defense).round
+  end
+
+  def cause_damage(**params)
+    damage = params[:damage]
+    target = params[:target]
+
+    (target.hp -= damage).round
+    puts "#{target.name}は#{damage}のダメージを受けた"
+  end
   
   def transform
     transform_name = "究極完全体ゾンビマン"
