@@ -23,7 +23,11 @@ class Brave
     cause_damage(target: monster, damage: damage)
 
     # メッセージ
-    puts "#{monster.name}の残りHPは#{monster.hp}ポイントだ。"
+    if monster.hp >= 0
+      puts "#{monster.name}の残りHPは#{monster.hp}ポイントだ。"
+    else
+      puts "#{monster.name}のHPは0になった。"
+    end
   end
 
   private
@@ -140,14 +144,24 @@ brave = Brave.new(name:"ヨシヒコ", hp: 500, offense: 150, defense: 100)
 monster = Monster.new(name: 'ゾンビマン', hp: 250, offense: 200, defense: 100)
 
 # 実行処理
-# 勇者攻撃
 loop do
   brave.attack(monster)
-  
-  #モンスターのHPが0以下になったらループを抜ける
   break if monster.hp <= 0
   
   # モンスター攻撃
   monster.attack(brave)
   break if brave.hp <= 0
+end
+
+# 勇者のHPが0でないで終了(＝勝利)
+battle_result = brave.hp > 0
+
+if battle_result
+  exp = (monster.offense + monster.defense) * 2
+  gold = (monster.offense + monster.defense) * 3
+  puts "#{brave.name}は戦いに勝利した。"
+  puts "#{exp.round}の経験値と#{gold.round}ゴールドを獲得した。"
+else
+  puts "#{brave.name}は戦いに敗れた"
+  puts "目の前が真っ暗になった。"
 end
