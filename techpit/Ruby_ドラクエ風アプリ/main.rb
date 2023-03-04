@@ -56,6 +56,8 @@ class Brave
     target = params[:target]
 
     target.hp -= damage
+
+    target.hp = 0 if target.hp < 0
     puts "#{target.name}は#{damage}ポイントのダメージを受けた。"
   end
 
@@ -113,6 +115,7 @@ class Monster
     target = params[:target]
 
     (target.hp -= damage).round
+    target.hp = 0 if target.hp < 0
     puts "#{target.name}は#{damage}のダメージを受けた"
   end
   
@@ -138,7 +141,13 @@ monster = Monster.new(name: 'ゾンビマン', hp: 250, offense: 200, defense: 1
 
 # 実行処理
 # 勇者攻撃
-brave.attack(monster)
-
-# モンスター攻撃
-monster.attack(brave)
+loop do
+  brave.attack(monster)
+  
+  #モンスターのHPが0以下になったらループを抜ける
+  break if monster.hp <= 0
+  
+  # モンスター攻撃
+  monster.attack(brave)
+  break if brave.hp <= 0
+end
