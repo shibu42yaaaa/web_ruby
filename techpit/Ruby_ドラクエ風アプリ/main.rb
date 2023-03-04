@@ -18,15 +18,15 @@ class Brave
     # 攻撃タイプ
     attack_type = decision_attack_type
     # 攻撃ダメージ換算
-    damage = calculate_damage(monster, attack_type)
+    damage = calculate_damage(target: monster, attack_type: attack_type)
     # ダメージをHPに反映させる
-    cause_damage(monster, damage)
+    cause_damage(target: monster, damage: damage)
 
-    
-    
     # メッセージ
     puts "#{monster.name}の残りHPは#{monster.hp}ポイントだ。"
   end
+
+  private
 
   def decision_attack_type
     attack_num = rand(4)
@@ -40,17 +40,23 @@ class Brave
     end
   end
 
-  def calculate_damage(monster, attack_type)
+  def calculate_damage(**params)
+    target = params[:target]
+    attack_type = params[:attack_type]
+
     if attack_type == "special_attack"
-      culculate_special_attack - monster.defense
+      culculate_special_attack - target.defense
     else
-      @offense - monster.defense
+      @offense - target.defense
     end
   end
   # HPへのダメージ処理を反映
-  def cause_damage(monster, damage)
-    monster.hp -= damage
-    puts "#{monster.name}は#{damage}ポイントのダメージを受けた。"
+  def cause_damage(**params)
+    damage = params[:damage]
+    target = params[:target]
+
+    target.hp -= damage
+    puts "#{target.name}は#{damage}ポイントのダメージを受けた。"
   end
 
   def culculate_special_attack
