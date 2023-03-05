@@ -10,7 +10,7 @@ class Character
   end
 end
 
-# braveくらす
+# braveクラス
 class Brave < Character
   SPECIAL_ATTACK_CONSTANT = 1.5
 
@@ -91,9 +91,8 @@ class Monster < Character
 
     puts "#{@name}の攻撃"
 
-    # monster -> brave
     damage = calculate_damage(brave)
-    cause_damage(brave, damage)
+    cause_damage(target: brave, damage: damage)
 
     puts "#{brave.name}の残りHPは#{brave.hp}だ"
   end
@@ -112,15 +111,18 @@ class Monster < Character
     @name = transform_name
   end
   
-  def calculate_damage(brave)
-    (@offense - brave.defense).round
+  def calculate_damage(target)
+    (@offense - target.defense).round
   end
 
-  def cause_damage(brave, damage)
-    (brave.hp -= damage).round
-    brave.hp = 0 if brave.hp < 0
+  def cause_damage(**params)
+    target = params[:target]
+    damage = params[:damage]
 
-    puts "#{brave.name}は#{damage}ポイントのダメージを受けた。"
+    (target.hp -= damage).round
+    target.hp = 0 if target.hp < 0
+
+    puts "#{target.name}は#{damage}ポイントのダメージを受けた。"
   end
 
 end
@@ -130,9 +132,21 @@ monster = Monster.new(name: 'ミニリュウ', hp: 250, offense: 200, defense: 1
 
 loop do
   brave.attack(monster)
-  break if monster.hp >= 0
+  break if monster.hp <= 0
 
   monster.attack(brave)
   break if brave.hp <= 0
+end
+
+battle_result = brave.hp > 0
+
+if battle_result
+  exp = (monster.offense + monster.defense) * 2
+  gold = (monster.offense + monster.defense) * 3
+  puts "#{brave.name}は戦いに勝った。"
+  puts "#{exp.round}の経験値と#{gold.round}ゴールドを獲得した。"
+else
+  puts "#{brave.name}は戦いに敗れた。"
+  puts "目の前が真っ暗になった。"
 end
 
