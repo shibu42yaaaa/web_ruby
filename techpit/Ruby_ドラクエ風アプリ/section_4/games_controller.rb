@@ -4,42 +4,51 @@ class GamesController
   GOLD_CONSTANT = 3
 
   def battle(**params)
-   brave = params[:brave]
-   monster = params[:monster]
-   
-   loop do
-     brave.attack(monster)
-     break if battle_end?(monster)
-   
-     monster.attack(brave)
-     break if battle_end?(brave)
-   end
+#    brave = params[:brave]
+#    monster = params[:monster]
+    build_characters(params)
+
+    loop do
+      @brave.attack(@monster)
+      break if battle_end?
+      @monster.attack(@brave)
+      break if battle_end?
+    end
+
+    buttle_judgment
 
    # 勇者の勝敗によるメッセージ
-   if battle_result(brave)
-     result = calculate_of_exp_gold(monster)
-     puts "#{brave.name}は戦いに勝った。"
-     puts "#{result[:exp]}の経験値と#{result[:gold]}ゴールドを獲得した。"
-   else
-    puts "#{brave.name}は戦いに負けた。"
-    puts "目の前が真っ暗になった。"
-   end
   end
 
-  
   private
-
-  def battle_end?(character)
-    character.hp <= 0
+  
+  def build_characters(**params)
+    @brave = params[:brave]
+    @monster = params[:monster]
   end
 
-  def battle_result(brave)
-    brave.hp > 0
+  def battle_end?
+    @brave.hp <= 0 || @monster.hp <= 0
   end
 
-  def calculate_of_exp_gold(monster)
-    exp = (monster.offense + monster.defense) * EXP_CONSTANT # 経験値の乗法定数
-    gold = (monster.offense + monster.defense) * GOLD_CONSTANT # 獲得ゴールドの乗法定数
+  def battle_win?
+    @brave.hp > 0
+  end
+  
+  def buttle_judgment
+    if battle_win?
+      result = calculate_of_exp_gold
+      puts "#{@brave.name}は戦いに勝った。"
+      puts "#{result[:exp]}の経験値と#{result[:gold]}ゴールドを獲得した。"
+    else
+      puts "#{@brave.name}は戦いに負けた。"
+      puts "目の前が真っ暗になった。"
+    end
+  end
+
+  def calculate_of_exp_gold
+    exp = (@monster.offense + @monster.defense) * EXP_CONSTANT # 経験値の乗法定数
+    gold = (@monster.offense + @monster.defense) * GOLD_CONSTANT # 獲得ゴールドの乗法定数
     result = {exp: exp, gold: gold}
 
     result
