@@ -23,12 +23,14 @@ class Monster < Character
       transform
     end
 
-    puts "#{@name}の攻撃"
+    # puts "#{@name}の攻撃"
 
     damage = calculate_damage(brave)
     cause_damage(target: brave, damage: damage)
 
-    puts "#{brave.name}の残りHPは#{brave.hp}だ"
+    # puts "#{brave.name}の残りHPは#{brave.hp}だ"
+    # 攻撃メッセージモジュール呼び出し
+    attack_message
   end
 
   private
@@ -36,10 +38,10 @@ class Monster < Character
   def transform
     transform_name = "ブルーアイズホワイトドラゴン"
 
-    puts <<~EOS
-    #{@name}は怒っている
-    #{@name}は#{transform_name}に変身した。
-    EOS
+    # puts <<~EOS
+    # #{@name}は怒っている
+    # #{@name}は#{transform_name}に変身した。
+    # EOS
 
     @offense *= POWER_UP_RATE
     @name = transform_name
@@ -58,5 +60,4 @@ class Monster < Character
 
     puts "#{target.name}は#{damage}ポイントのダメージを受けた。"
   end
-
 end
