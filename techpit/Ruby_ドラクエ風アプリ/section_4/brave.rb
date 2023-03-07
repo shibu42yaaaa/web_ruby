@@ -10,6 +10,7 @@ class Brave < Character
     
     # 攻撃メッセージモジュール呼び出し
     attack_message(attack_type: attack_type)
+    damage_message(target: monster, damage: damage)
   end
 
   private

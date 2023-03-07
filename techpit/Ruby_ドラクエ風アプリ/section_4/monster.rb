@@ -31,6 +31,7 @@ class Monster < Character
     # puts "#{brave.name}の残りHPは#{brave.hp}だ"
     # 攻撃メッセージモジュール呼び出し
     attack_message
+    damage_message(target: brave, damage: damage)
   end
 
   private
