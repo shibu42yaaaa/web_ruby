@@ -23,14 +23,10 @@ class Monster < Character
       transform
     end
 
-    # puts "#{@name}の攻撃"
-
     damage = calculate_damage(brave)
     cause_damage(target: brave, damage: damage)
 
-    # puts "#{brave.name}の残りHPは#{brave.hp}だ"
-    # 攻撃メッセージモジュール呼び出し
-    attack_message
+    attack_message(target: brave)
     damage_message(target: brave, damage: damage)
   end
 
