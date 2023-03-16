@@ -10,21 +10,39 @@ class GamesController
   
     loop do
       brave.attack(monster)
-      break if monster.hp <= 0
+      break if battle_end?(monster)
       monster.attack(brave)
-      break if brave.hp <= 0
+      break if battle_end?(brave)
     end
     
-    battle_result = brave.hp > 0
     
-    if battle_result
-      exp = (monster.offense + monster.defense) * EXP_CONSTANT
-      gold = (monster.offense + monster.defense) * GOLD_CONSTANT
+    if battle_result(brave)
+    #   exp = (monster.offense + monster.defense) * EXP_CONSTANT
+    #   gold = (monster.offense + monster.defense) * GOLD_CONSTANT
+      result = calculate_of_exp_gold(monster)
       puts "#{brave.name}は戦いに勝った。"
-      puts "#{exp.round}の経験値と#{gold.round}ゴールドを獲得した。"
+      puts "#{result[:exp].round}の経験値と#{result[:gold].round}ゴールドを獲得した。"
     else
       puts "#{brave.name}は戦いに負けた。"
       puts "目の前が真っ暗になった。"
     end
+  end
+
+  private
+
+  def battle_end?(character)
+    character.hp <= 0
+  end
+
+  def battle_result(brave)
+    brave.hp > 0
+  end
+
+  def calculate_of_exp_gold(monster)
+    exp = (monster.offense + monster.defense) * EXP_CONSTANT
+    gold = (monster.offense + monster.defense) * GOLD_CONSTANT
+    result = {exp: exp, gold: gold}
+
+    result
   end
 end
