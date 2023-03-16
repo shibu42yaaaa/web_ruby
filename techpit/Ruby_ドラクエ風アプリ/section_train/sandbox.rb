@@ -1,15 +1,7 @@
-class Brave
-  attr_reader :name, :offense, :defense
-  attr_accessor :hp
+require './character'
 
+class Brave < Characrer
   SPECIAL_ATTACK_CONSTANT = 1.5
-
-  def initialize(**params)
-    @name = params[:name]
-    @hp = params[:hp]
-    @offense = params[:offense]
-    @defense = params[:defense]
-  end
 
   def attack(monster)
     puts "#{@name}の攻撃"
@@ -61,7 +53,7 @@ class Brave
   end
 end
 
-class Monster
+class Monster < Characrer
   attr_reader :offense, :defense
   attr_accessor :name, :hp
 

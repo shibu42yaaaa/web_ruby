@@ -1,9 +1,9 @@
 require './character'
 
 class Monster < Characrer
-  CALC_HALF_HP = 0.5
   POWER_UP_RATE = 1.5
-  
+  CALC_HALF_HP = 0.5
+
   def initialize(**params)
     super(
         name: params[:name],
@@ -18,31 +18,17 @@ class Monster < Characrer
 
   def attack(brave)
     if @hp < @trigger_of_transform && @transfrom_flag == false
-        @transfrom_flag = true
-        transform
+      @transfrom_flag == true
+      transform
     end
-    puts "#{@name}の攻撃"
 
     damage = calculate_damage(brave)
     cause_damage(target: brave, damage: damage)
 
-    puts "#{brave.name}は#{damage}ポイントのダメージを受けた"
     puts "#{brave.name}の残りHPは#{brave.hp}だ"
   end
 
   private
-
-  def calculate_damage(target)
-    @offense - target.defense
-  end
-
-  def cause_damage(**params)
-    target = params[:target]
-    damage = params[:damage]
-
-    target.hp -= damage
-    puts "#{target.name}は#{damage}のダメージを受けた"
-  end
 
   def transform
     transform_name = "ドラゴン"
@@ -52,7 +38,20 @@ class Monster < Characrer
     #{@name}は#{transform_name}に進化した。
     EOS
 
-    @name = transform_name
     @offense *= POWER_UP_RATE
+    @name = transform_name
+  end
+
+  def calculate_damage(target)
+    (@offense - target.defense).round
+  end
+
+  def cause_damage(**params)
+    target = params[:target]
+    damage = params[:damage]
+
+    target.hp -= damage
+    target.hp = 0 if target.hp < 0
+    puts "#{target.name}は#{damage}ポイントのダメージを受けた。"
   end
 end
